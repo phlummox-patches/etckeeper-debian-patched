@@ -10,7 +10,7 @@ if [ "$VCS" = bzr ] || [ "$VCS" = darcs ]; then
 	hardlinks=$(find . -type f ! -links 1 | exclude_internal ) || true
 elif [ "$VCS" = hg ]; then
 	special=$(find . ! -type d ! -type f ! -type l | exclude_internal) || true
-	hardlinks=$(find . -type f ! -links 1 -exec hg status {} \; | exclude_internal ) || true
+	hardlinks=$(find . \( -name .hg -prune \) -o \( -type f ! -links 1 -exec hg status {} \; \) ) || true
 elif [ "$VCS" = git ]; then
 	special=$(find . ! -type d ! -type f ! -type l -exec git ls-files --exclude-standard --cached --others {} + | exclude_internal) || true
 	hardlinks=$(find . -type f ! -links 1 -exec git ls-files --exclude-standard --cached --others {} + | exclude_internal) || true
